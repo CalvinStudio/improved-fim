@@ -24,11 +24,11 @@ int main(int argc, char *argv[])
 
     //! input DIY velocity
     Frame vel_grid;
-    vel_grid.set_nd(200, 200, 200, 1, 1, 1); //* 200 represets grid size;1 is grid node spacing
+    vel_grid.set_nd(201, 201, 201, 1, 1, 1); //* 200 represets grid size;1 is grid node spacing
     fcufld Vel(MemType::npin, vel_grid);
-    for (int k = 0; k < 200; k++)
-        for (int j = 0; j < 200; j++)
-            for (int i = 0; i < 200; i++)
+    for (int k = 0; k < 201; k++)
+        for (int j = 0; j < 201; j++)
+            for (int i = 0; i < 201; i++)
                 Vel(i, j, k) = 2000;
     Vel.cu_copy_h2d();
 
