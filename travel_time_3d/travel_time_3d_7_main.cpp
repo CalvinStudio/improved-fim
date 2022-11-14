@@ -2,7 +2,6 @@
 #ifndef TRAVEL_TIME_3D_MAIN_CPP
 #define TRAVEL_TIME_3D_MAIN_CPP
 #include "travel_time_3d_5_meat.hpp"
-#include "include/.jarvis_2_gms/.jarvis_device_gms_header_out.h"
 using namespace jarvis;
 int main(int argc, char *argv[])
 {
@@ -15,19 +14,24 @@ int main(int argc, char *argv[])
 #ifdef JARVIS_DEBUG
     cout << "DEBUG MODEL" << endl;
 #endif
-    //
     cudaSetDevice(1);
-    travel_time_3d_module travel_time_3d_theoretical;
-    travel_time_3d_module travel_time_3d_1rd;
-    travel_time_3d_module travel_time_3d_1rd_diag;
-    travel_time_3d_module travel_time_3d_2rd;
-    travel_time_3d_module travel_time_3d_2rd_diag;
-    cout << path << endl;
-    jarvis::GmsReader gms(path);
     //
-    fcufld Vel;
-    gms.read_gms_by_order_to_fcufield(Vel);
-    //
+    travel_time_3d_module travel_time_3d_theoretical; //*To generate theoretical values
+    travel_time_3d_module travel_time_3d_1rd;         //*First-order difference
+    travel_time_3d_module travel_time_3d_1rd_diag;    //*first-order difference with diagonal node
+    travel_time_3d_module travel_time_3d_2rd;         //*second-order difference
+    travel_time_3d_module travel_time_3d_2rd_diag;    //*second-order difference with diagonal node
+
+    //! input DIY velocity
+    Frame vel_grid;
+    vel_grid.set_nd(200, 200, 200, 1, 1, 1); //* 200 represets grid size;1 is grid node spacing
+    fcufld Vel(MemType::npin, vel_grid);
+    for (int k = 0; k < 200; k++)
+        for (int j = 0; j < 200; j++)
+            for (int i = 0; i < 200; i++)
+                Vel(i, j, k) = 2000;
+    Vel.cu_copy_h2d();
+
     Vel.frame.print_info();
     tp3cuvec shot(MemType::pin, 1);
     shot(0).x = 100;
@@ -74,7 +78,7 @@ int main(int argc, char *argv[])
     }
     cout << "travel_time_3d_1rd:time_error_mean:  " << time_error.mean() << endl;
     cout << "travel_time_3d_1rd:time_error_max :  " << time_error.max() << endl;
-    cout << "travel_time_3d_1rd:time_error_min :  " << time_error.min() << endl;
+    cout << "travel_time_3d_1rd:time_error_min :  " << time_error.min() << endl; //*Very small negative value, can be regarded as zero.
     cout << endl;
     //
     for (int i = 0; i < travel_time_3d_1rd_diag.time.frame.n_elem; i++)
@@ -83,7 +87,7 @@ int main(int argc, char *argv[])
     }
     cout << "travel_time_3d_1rd_diag:time_error_mean:  " << time_error.mean() << endl;
     cout << "travel_time_3d_1rd_diag:time_error_max :  " << time_error.max() << endl;
-    cout << "travel_time_3d_1rd_diag:time_error_min :  " << time_error.min() << endl;
+    cout << "travel_time_3d_1rd_diag:time_error_min :  " << time_error.min() << endl; //*Very small negative value, can be regarded as zero.
     cout << endl;
     //
     for (int i = 0; i < travel_time_3d_2rd.time.frame.n_elem; i++)
@@ -92,7 +96,7 @@ int main(int argc, char *argv[])
     }
     cout << "travel_time_3d_2rd:time_error_mean:  " << time_error.mean() << endl;
     cout << "travel_time_3d_2rd:time_error_max :  " << time_error.max() << endl;
-    cout << "travel_time_3d_2rd:time_error_min :  " << time_error.min() << endl;
+    cout << "travel_time_3d_2rd:time_error_min :  " << time_error.min() << endl; //*Very small negative value, can be regarded as zero.
     cout << endl;
     //
     for (int i = 0; i < travel_time_3d_2rd_diag.time.frame.n_elem; i++)
@@ -101,7 +105,7 @@ int main(int argc, char *argv[])
     }
     cout << "travel_time_3d_2rd_diag:time_error_mean:  " << time_error.mean() << endl;
     cout << "travel_time_3d_2rd_diag:time_error_max :  " << time_error.max() << endl;
-    cout << "travel_time_3d_2rd_diag:time_error_min :  " << time_error.min() << endl;
+    cout << "travel_time_3d_2rd_diag:time_error_min :  " << time_error.min() << endl; //*Very small negative value, can be regarded as zero.
     cout << endl;
     return 0;
 }

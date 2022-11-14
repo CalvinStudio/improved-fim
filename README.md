@@ -30,9 +30,6 @@ Traveltime calculation is widely used in seismic tomography,migration imaging, e
 
 ## Example of running results (GPU:Tesla V100)
 >sh run.sh <br>
->DEBUG MODEL<br>
->demo/model/cube200.gms<br>
-><br>
 >Grid_X_Num:  201; INTERVAL:     1; RANGE:[0, 200]<br>
 >Grid_Y_Num:  201; INTERVAL:     1; RANGE:[0, 200]<br>
 >Grid_Z_Num:  201; INTERVAL:     1; RANGE:[0, 200]<br>
@@ -56,5 +53,12 @@ Traveltime calculation is widely used in seismic tomography,migration imaging, e
 >travel_time_3d_2rd_diag:time_error_max :  0.000282375<br>
 >travel_time_3d_2rd_diag:time_error_min :  -2.32831e-10<br>
 
+
+## Matters needing attention
+If you want to input the velocity model designed by yourself,
+you can use the form of `Vel(i, j, k)=value`.<br>
+Remember to copy the value to GPU by `Vel.cu_copy_h2d()` after the velocity input is completed
+
+
 ## License
-MIT 
+MIT © @CalvinStudio
