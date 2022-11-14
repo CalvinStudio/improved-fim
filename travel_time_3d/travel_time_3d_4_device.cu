@@ -1,7 +1,7 @@
 #pragma once
 #ifndef GPU_TRAVEL_TIME_3D_CU
 #define GPU_TRAVEL_TIME_3D_CU
-#include "travel_time_3d_5_meat.hpp"
+#include "travel_time_3d_3_meat.hpp"
 namespace jarvis
 {
 	void travel_time_3d_module::cu_cal_time(tp3cuvec &_shotline)

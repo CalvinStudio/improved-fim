@@ -1,7 +1,7 @@
 #pragma once
 #ifndef TRAVEL_TIME_3D_MAIN_CPP
 #define TRAVEL_TIME_3D_MAIN_CPP
-#include "travel_time_3d_5_meat.hpp"
+#include "travel_time_3d_3_meat.hpp"
 using namespace jarvis;
 int main(int argc, char *argv[])
 {
@@ -38,11 +38,6 @@ int main(int argc, char *argv[])
     shot(0).y = 100;
     shot(0).z = 100;
     shot(0).time = 0;
-    //
-    tp3cuvec rece(MemType::pin, 1);
-    rece(0).x = 25;
-    rece(0).y = 50;
-    rece(0).z = 20;
     //
     travel_time_3d_1rd.module_init(&Vel, 11);
     travel_time_3d_1rd_diag.module_init(&Vel, 12);
