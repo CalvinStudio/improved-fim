@@ -1,4 +1,5 @@
-![](jarvis_min.jpg =400x300)
+<img src="./jarvis_min.jpg" width = "360" align=center />
+
 # open_travel_time_3d_gpu
 
 ## Background
@@ -13,15 +14,47 @@ Traveltime calculation is widely used in seismic tomography,migration imaging, e
 
 ## Software testing environment
 ### linux (Author's test environment:CentOS)
->g++ -std=c++11
+>g++ -std=c++11<br>
 >nvcc -V $\geqslant$ 9.2
 ### windows
->[Visual Studio 2017 + cuda 9.2] or [Visual Studio 2022 + cuda 11.4]
+>[Visual Studio 2017 + cuda 9.2] or<br>
+ [Visual Studio 2022 + cuda 11.4]
 
 ## Usage
  ### linux
- > cd travel_time_3d
+ > cd travel_time_3d<br>
  > sh run.sh
 
 ### windows
 >Create your own visual studio project, drag the code in and compile it.
+
+## Example of running results (GPU:Tesla V100)
+>sh run.sh <br>
+>DEBUG MODEL<br>
+>demo/model/cube200.gms<br>
+><br>
+>Grid_X_Num:  201; INTERVAL:     1; RANGE:[0, 200]<br>
+>Grid_Y_Num:  201; INTERVAL:     1; RANGE:[0, 200]<br>
+>Grid_Z_Num:  201; INTERVAL:     1; RANGE:[0, 200]<br>
+>COST TIME1:0.26s<br>
+>COST TIME2:0.26s<br>
+>COST TIME3:0.29s<br>
+>COST TIME4:0.32s<br>
+>travel_time_3d_1rd:time_error_mean:  0.000837048<br>
+>travel_time_3d_1rd:time_error_max :  0.0013247<br>
+>travel_time_3d_1rd:time_error_min :  -2.32831e-10<br>
+><br>
+>travel_time_3d_1rd_diag:time_error_mean:  0.000703205<br>
+>travel_time_3d_1rd_diag:time_error_max :  0.000979394<br>
+>travel_time_3d_1rd_diag:time_error_min :  -2.05273e-09<br>
+><br>
+>travel_time_3d_2rd:time_error_mean:  0.000201762<br>
+>travel_time_3d_2rd:time_error_max :  0.000310671<br>
+>travel_time_3d_2rd:time_error_min :  -2.32831e-10<br>
+><br>
+>travel_time_3d_2rd_diag:time_error_mean:  0.000196653<br>
+>travel_time_3d_2rd_diag:time_error_max :  0.000282375<br>
+>travel_time_3d_2rd_diag:time_error_min :  -2.32831e-10<br>
+
+## License
+MIT 
