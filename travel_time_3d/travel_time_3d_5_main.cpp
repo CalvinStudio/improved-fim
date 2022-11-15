@@ -25,39 +25,39 @@ int main()
 
     Vel.frame.print_info(); //*print grid information
     tp3cuvec source(MemType::pin, 1);
-    source(0).x = 100; //*source
+    source(0).x = 100; //*source location
     source(0).y = 100;
     source(0).z = 100;
-    source(0).time = 0;
+    source(0).time = 0;//*Source time is 0
     //
-    travel_time_3d_1rd.module_init(&Vel, 11);
-    travel_time_3d_1rd_diag.module_init(&Vel, 12);
-    travel_time_3d_2rd.module_init(&Vel, 21);
-    travel_time_3d_2rd_diag.module_init(&Vel, 22);
-    travel_time_3d_theoretical.module_init(&Vel, 11);
+    travel_time_3d_1rd.module_init(&Vel, 11);//11:First-order difference
+    travel_time_3d_1rd_diag.module_init(&Vel, 12);//12:first-order difference with diagonal node
+    travel_time_3d_2rd.module_init(&Vel, 21);//21:second-order difference
+    travel_time_3d_2rd_diag.module_init(&Vel, 22);//second-order difference with diagonal node
+    travel_time_3d_theoretical.module_init(&Vel, 11);//11 Not required here
     //
-    travel_time_3d_theoretical.cal_travel_time(source, TravelType::theoretical);
+    travel_time_3d_theoretical.cal_travel_time(source, TravelType::theoretical);//calculate theoretical values
     TIC(0);
     travel_time_3d_1rd.cal_travel_time(source, TravelType::normal);
-    TOC(0, "COST TIME1:");
+    TOC(0, "First-order difference COST TIME1:");
 
     TIC(1);
     travel_time_3d_1rd_diag.cal_travel_time(source, TravelType::normal);
-    TOC(1, "COST TIME2:");
+    TOC(1, "first-order difference with diagonal node COST TIME2:");
 
     TIC(2);
     travel_time_3d_2rd.cal_travel_time(source, TravelType::normal);
-    TOC(2, "COST TIME3:");
+    TOC(2, "second-order difference COST TIME3:");
 
     TIC(3);
     travel_time_3d_2rd_diag.cal_travel_time(source, TravelType::normal);
-    TOC(3, "COST TIME4:");
+    TOC(3, "second-order difference with diagonal node COST TIME4:");
 
-    travel_time_3d_1rd.get_device_time();
+    travel_time_3d_1rd.get_device_time();//Copy the travel time data on the GPU to the host memory
     travel_time_3d_1rd_diag.get_device_time();
     travel_time_3d_2rd.get_device_time();
     travel_time_3d_2rd_diag.get_device_time();
-    field time_error(travel_time_3d_2rd_diag.time.frame);
+    field time_error(travel_time_3d_2rd_diag.time.frame);//calculation error
     for (int i = 0; i < travel_time_3d_1rd.time.frame.n_elem; i++)
     {
         time_error[i] = travel_time_3d_1rd.time[i] - travel_time_3d_theoretical.time[i];

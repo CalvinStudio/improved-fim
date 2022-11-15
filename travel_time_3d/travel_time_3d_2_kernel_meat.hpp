@@ -53,7 +53,7 @@ namespace jarvis
 					trav = diff3d_2diag(tx, ty, tz, vel_grid, _vel, _time);
 				//
 				_time[idx] = trav;
-				_mark[idx] = NodeStatus::converging; // Mark as converging node
+				_mark[idx] = NodeStatus::converging; // Marked as converging node
 			}
 		}
 	}
@@ -93,7 +93,7 @@ namespace jarvis
 	}
 
 	inline __global__ void fim_kernel_2_set_as_converged_node(Frame vel_grid, NodeStatus *_mark)
-	{ // Temporarily converted to convergence node, which may become active node later
+	{ // Temporarily converted to converged node, which may become active node later in function "fim_kernel_1_mark_new_active_node"
 		set_cufield_3d_idx(vel_grid, idx, tx, ty, tz);
 		if (idx < vel_grid.n_elem)
 		{
@@ -105,7 +105,7 @@ namespace jarvis
 	}
 
 	inline __global__ void fim_kernel_3_check_is_finishd(Frame vel_grid, NodeStatus *_mark, bool *endflag)
-	{ // Do not end as long as there is an activation node
+	{ // Do not end as long as there is an active node
 		set_cufield_3d_idx(vel_grid, idx, tx, ty, tz);
 		if (idx < vel_grid.n_elem)
 		{
