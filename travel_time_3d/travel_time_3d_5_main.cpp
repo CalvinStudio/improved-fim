@@ -3,20 +3,11 @@
 #define TRAVEL_TIME_3D_MAIN_CPP
 #include "travel_time_3d_3_meat.hpp"
 using namespace jarvis;
-int main(int argc, char *argv[])
+int main()
 {
-    if (!argv[1])
-    {
-        cout << "Please input argfile!" << endl;
-        std::abort();
-    }
-    string path = string(argv[1]) + "/model/cube200.gms";
-#ifdef JARVIS_DEBUG
-    cout << "DEBUG MODEL" << endl;
-#endif
-    cudaSetDevice(1);
+    cudaSetDevice(0);
     //
-    travel_time_3d_module travel_time_3d_theoretical; //*To generate theoretical values
+    travel_time_3d_module travel_time_3d_theoretical; //!(just for constant velocity model)To generate theoretical values
     travel_time_3d_module travel_time_3d_1rd;         //*First-order difference
     travel_time_3d_module travel_time_3d_1rd_diag;    //*first-order difference with diagonal node
     travel_time_3d_module travel_time_3d_2rd;         //*second-order difference
@@ -32,12 +23,12 @@ int main(int argc, char *argv[])
                 Vel(i, j, k) = 2000;
     Vel.cu_copy_h2d();
 
-    Vel.frame.print_info();
-    tp3cuvec shot(MemType::pin, 1);
-    shot(0).x = 100;
-    shot(0).y = 100;
-    shot(0).z = 100;
-    shot(0).time = 0;
+    Vel.frame.print_info(); //*print grid information
+    tp3cuvec source(MemType::pin, 1);
+    source(0).x = 100; //*source
+    source(0).y = 100;
+    source(0).z = 100;
+    source(0).time = 0;
     //
     travel_time_3d_1rd.module_init(&Vel, 11);
     travel_time_3d_1rd_diag.module_init(&Vel, 12);
@@ -45,21 +36,21 @@ int main(int argc, char *argv[])
     travel_time_3d_2rd_diag.module_init(&Vel, 22);
     travel_time_3d_theoretical.module_init(&Vel, 11);
     //
-    travel_time_3d_theoretical.cal_travel_time(shot, TravelType::theoretical);
+    travel_time_3d_theoretical.cal_travel_time(source, TravelType::theoretical);
     TIC(0);
-    travel_time_3d_1rd.cal_travel_time(shot, TravelType::normal);
+    travel_time_3d_1rd.cal_travel_time(source, TravelType::normal);
     TOC(0, "COST TIME1:");
 
     TIC(1);
-    travel_time_3d_1rd_diag.cal_travel_time(shot, TravelType::normal);
+    travel_time_3d_1rd_diag.cal_travel_time(source, TravelType::normal);
     TOC(1, "COST TIME2:");
 
     TIC(2);
-    travel_time_3d_2rd.cal_travel_time(shot, TravelType::normal);
+    travel_time_3d_2rd.cal_travel_time(source, TravelType::normal);
     TOC(2, "COST TIME3:");
 
     TIC(3);
-    travel_time_3d_2rd_diag.cal_travel_time(shot, TravelType::normal);
+    travel_time_3d_2rd_diag.cal_travel_time(source, TravelType::normal);
     TOC(3, "COST TIME4:");
 
     travel_time_3d_1rd.get_device_time();
